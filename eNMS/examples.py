@@ -49,13 +49,13 @@ def create_network_topology(app: Flask) -> None:
 
 
 def create_example_services() -> None:
-    admin = fetch("User", name="admin").id
+    admin = fetch("User", name="admin")
     for service in (
         {
             "type": "ConfigureBgpService",
             "name": "napalm_configure_bgp_1",
             "description": "Configure BGP Peering with Napalm",
-            "devices": [fetch("Device", name="Washington").id],
+            "devices": [fetch("Device", name="Washington")],
             "creator": admin,
             "local_as": 100,
             "loopback": "Lo100",
@@ -69,7 +69,7 @@ def create_example_services() -> None:
             "type": "GenericFileTransferService",
             "name": "test_file_transfer_service",
             "description": "Test the file transfer service",
-            "devices": [fetch("Device", name="Aserver").id],
+            "devices": [fetch("Device", name="Aserver")],
             "creator": admin,
             "direction": "get",
             "protocol": "scp",
@@ -81,7 +81,7 @@ def create_example_services() -> None:
             "type": "LogBackupService",
             "name": "test_log_backup_service",
             "description": "Test the log backup service",
-            "devices": [fetch("Device", name="Aserver").id],
+            "devices": [fetch("Device", name="Aserver")],
             "creator": admin,
             "protocol": "scp",
             "destination_ip_address": "127.0.0.1",
@@ -93,7 +93,7 @@ def create_example_services() -> None:
             "type": "DatabaseBackupService",
             "name": "test_database_backup_service",
             "description": "Test the log backup service",
-            "devices": [fetch("Device", name="Aserver").id],
+            "devices": [fetch("Device", name="Aserver")],
             "creator": admin,
             "protocol": "scp",
             "destination_ip_address": "127.0.0.1",
@@ -105,7 +105,7 @@ def create_example_services() -> None:
             "type": "NetmikoBackupService",
             "name": "netmiko_configuration_backup",
             "description": "Test Configuration Management",
-            "devices": [fetch("Device", name="Washington").id],
+            "devices": [fetch("Device", name="Washington")],
             "configuration_command": "show running-config",
             "multiprocessing": True,
             "creator": admin,
@@ -114,7 +114,7 @@ def create_example_services() -> None:
             "type": "NapalmBackupService",
             "name": "napalm_configuration_backup",
             "description": "Test Configuration Management",
-            "devices": [fetch("Device", name="Washington").id],
+            "devices": [fetch("Device", name="Washington")],
             "multiprocessing": True,
             "creator": admin,
         },
@@ -123,8 +123,8 @@ def create_example_services() -> None:
 
 
 def create_netmiko_workflow() -> None:
-    services, admin = [], fetch("User", name="admin").id
-    devices = [fetch("Device", name="Washington").id, fetch("Device", name="Austin").id]
+    services, admin = [], fetch("User", name="admin")
+    devices = [fetch("Device", name="Washington"), fetch("Device", name="Austin")]
     for service in (
         {
             "type": "NetmikoConfigurationService",
@@ -212,10 +212,10 @@ def create_netmiko_workflow() -> None:
             "WorkflowEdge",
             **{
                 "name": f"{workflow.name} {x} -> {y}",
-                "workflow": workflow.id,
+                "workflow": workflow,
                 "subtype": "success",
-                "source": workflow.jobs[x].id,
-                "destination": workflow.jobs[y].id,
+                "source": workflow.jobs[x],
+                "destination": workflow.jobs[y],
             },
         )
     positions = [(-20, 0), (20, 0), (0, -15), (0, -5), (0, 5), (0, 15)]
@@ -224,8 +224,8 @@ def create_netmiko_workflow() -> None:
 
 
 def create_napalm_workflow() -> None:
-    admin = fetch("User", name="admin").id
-    devices = [fetch("Device", name="Washington").id, fetch("Device", name="Austin").id]
+    admin = fetch("User", name="admin")
+    devices = [fetch("Device", name="Washington"), fetch("Device", name="Austin")]
     services = [
         factory(
             "NapalmConfigurationService",
@@ -269,10 +269,10 @@ def create_napalm_workflow() -> None:
             "WorkflowEdge",
             **{
                 "name": f"{workflow.name} {x} -> {y}",
-                "workflow": workflow.id,
+                "workflow": workflow,
                 "subtype": "success",
-                "source": workflow.jobs[x].id,
-                "destination": workflow.jobs[y].id,
+                "source": workflow.jobs[x],
+                "destination": workflow.jobs[y],
             },
         )
     positions = [(-20, 0), (20, 0), (0, -15), (0, -5), (0, 5), (0, 15)]
@@ -281,8 +281,8 @@ def create_napalm_workflow() -> None:
 
 
 def create_payload_transfer_workflow() -> None:
-    services, admin = [], fetch("User", name="admin").id
-    devices = [fetch("Device", name="Washington").id, fetch("Device", name="Austin").id]
+    services, admin = [], fetch("User", name="admin")
+    devices = [fetch("Device", name="Washington"), fetch("Device", name="Austin")]
     for service in (
         [
             {
@@ -367,10 +367,10 @@ def create_payload_transfer_workflow() -> None:
             "WorkflowEdge",
             **{
                 "name": f"{workflow.name}:success {x} -> {y}",
-                "workflow": workflow.id,
+                "workflow": workflow,
                 "subtype": "success",
-                "source": workflow.jobs[x].id,
-                "destination": workflow.jobs[y].id,
+                "source": workflow.jobs[x],
+                "destination": workflow.jobs[y],
             },
         )
     prerequisite_edges = [(4, 7), (3, 7)]
@@ -379,17 +379,17 @@ def create_payload_transfer_workflow() -> None:
             "WorkflowEdge",
             **{
                 "name": f"{workflow.name}:prerequisite {x} -> {y}",
-                "workflow": workflow.id,
+                "workflow": workflow,
                 "subtype": "prerequisite",
-                "source": workflow.jobs[x].id,
-                "destination": workflow.jobs[y].id,
+                "source": workflow.jobs[x],
+                "destination": workflow.jobs[y],
             },
         )
 
 
 def create_workflow_of_workflows() -> None:
-    admin = fetch("User", name="admin").id
-    devices = [fetch("Device", name="Washington").id]
+    admin = fetch("User", name="admin")
+    devices = [fetch("Device", name="Washington")]
     workflow = factory(
         "Workflow",
         **{
@@ -414,11 +414,11 @@ def create_workflow_of_workflows() -> None:
             "WorkflowEdge",
             **{
                 "name": f"{workflow.name} {x} -> {y}",
-                "workflow": workflow.id,
+                "workflow": workflow,
                 "subtype": "success",
                 "devices": devices,
-                "source": workflow.jobs[x].id,
-                "destination": workflow.jobs[y].id,
+                "source": workflow.jobs[x],
+                "destination": workflow.jobs[y],
             },
         )
     positions = [(-30, 0), (30, 0), (0, -20), (0, 0), (0, 20)]

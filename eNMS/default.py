@@ -66,7 +66,7 @@ def create_default_parameters(app: Flask) -> None:
 
 
 def create_default_services() -> None:
-    admin = fetch("User", name="admin").id
+    admin = fetch("User", name="admin")
     for service in (
         {
             "type": "SwissArmyKnifeService",
@@ -131,7 +131,7 @@ def create_default_workflows() -> None:
             "name": name,
             "description": "Poll configuration and push to gitlab",
             "use_workflow_targets": False,
-            "creator": fetch("User", name="admin").id,
+            "creator": fetch("User", name="admin"),
         },
     )
     workflow.jobs.extend(
@@ -146,10 +146,10 @@ def create_default_workflows() -> None:
             "WorkflowEdge",
             **{
                 "name": f"{workflow.name} {x} -> {y} ({edge_type})",
-                "workflow": workflow.id,
+                "workflow": workflow,
                 "subtype": "success" if edge_type else "failure",
-                "source": workflow.jobs[x].id,
-                "destination": workflow.jobs[y].id,
+                "source": workflow.jobs[x],
+                "destination": workflow.jobs[y],
             },
         )
     positions = [(-30, 0), (20, 0), (0, -20), (0, 30)]
@@ -163,14 +163,14 @@ def create_default_tasks(app: Flask) -> None:
             "aps_job_id": "Poller",
             "name": "Poller",
             "description": "Back-up device configurations",
-            "job": fetch("Workflow", name="Configuration Management Workflow").id,
+            "job": fetch("Workflow", name="Configuration Management Workflow"),
             "frequency": 3600,
         },
         {
             "aps_job_id": "Cluster Monitoring",
             "name": "Cluster Monitoring",
             "description": "Monitor eNMS cluster",
-            "job": fetch("Service", name="cluster_monitoring").id,
+            "job": fetch("Service", name="cluster_monitoring"),
             "frequency": 15,
             "is_active": app.config["CLUSTER"],
         },

@@ -48,24 +48,7 @@ class Base(db.Model):
             super().__setattr__(property, value)
 
     def update(self, **kwargs: Any) -> None:
-        serial = rel.get(self.__tablename__, rel["Service"])
         for property, value in kwargs.items():
-            property_type = property_types.get(property, None)
-            if property in serial:
-                value = fetch(serial[property], id=value)
-            elif property[:-1] in serial:
-                value = objectify(serial[property[:-1]], value)
-            elif property in boolean_properties:
-                value = kwargs[property] not in (None, False)
-            elif "regex" in property:
-                value = property in kwargs
-            elif property_type == "dict" and type(value) == str:
-                value = loads(value) if value else {}
-            elif property_type in ["float", "int"]:
-                default_value = getattr(self.__table__.c, property).default
-                if default_value and not value:
-                    value = default_value.arg
-                value = {"float": float, "int": int}[property_type](value or 0)
             setattr(self, property, value)
 
     def get_properties(self) -> dict:

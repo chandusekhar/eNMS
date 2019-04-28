@@ -1,3 +1,4 @@
+from flask_login import current_user
 from flask_wtf import FlaskForm
 from typing import Any
 from wtforms import (
@@ -13,7 +14,7 @@ from wtforms import (
 from wtforms.fields.core import UnboundField
 
 from eNMS.controller import controller
-from eNMS.database import choices
+from eNMS.database import choices, objectify
 from eNMS.properties import (
     custom_properties,
     pool_link_properties,
@@ -65,7 +66,15 @@ def form_preprocessing(*args, **kwargs):
 
 
 def form_postprocessing(form):
-    pass
+    data = {**form.to_dict(), **{"creator": current_user.id}}
+    for property, field_type in form_properties[form["form_type"]].items():
+        value = form.get(property)
+        if field_type == "multiselect":
+            data[property] = form.getlist(property)
+        elif field_type == "object-list":
+            list_id = form.getlist(property)
+            data[property] = objectify(property[:-1], list_id)
+    return data
 
 
 class LoginForm(FlaskForm, metaclass=form_preprocessing):
