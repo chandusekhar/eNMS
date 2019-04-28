@@ -59,6 +59,7 @@ def factory(cls_name: str, **kwargs: Any) -> db.Model:
     else:
         instance = fetch(cls_name, name=kwargs["name"])
     if instance:
+        print(kwargs)
         instance.update(**kwargs)
     else:
         instance = classes[cls_name](**kwargs)

@@ -138,8 +138,8 @@ def create_netmiko_workflow() -> None:
             "driver": "arista_eos",
             "global_delay_factor": "1.0",
             "content": "vrf definition test",
-            "enable_mode": "y",
-            "fast_cli": "y",
+            "enable_mode": True,
+            "fast_cli": True,
             "timeout": 3,
         },
         {
@@ -154,7 +154,7 @@ def create_netmiko_workflow() -> None:
             "driver": "arista_eos",
             "command": "show vrf",
             "content_match": "test",
-            "fast_cli": "y",
+            "fast_cli": True,
             "timeout": 3,
         },
         {
@@ -169,8 +169,8 @@ def create_netmiko_workflow() -> None:
             "driver": "arista_eos",
             "global_delay_factor": "1.0",
             "content": "no vrf definition test",
-            "enable_mode": "y",
-            "fast_cli": "y",
+            "enable_mode": True,
+            "fast_cli": True,
             "timeout": 3,
         },
         {
@@ -185,8 +185,8 @@ def create_netmiko_workflow() -> None:
             "driver": "arista_eos",
             "command": "show vrf",
             "content_match": "^((?!test)[\s\S])*$",
-            "content_match_regex": "y",
-            "fast_cli": "y",
+            "content_match_regex": True,
+            "fast_cli": True,
             "timeout": 3,
             "number_of_retries": 2,
             "time_between_retries": 1,
@@ -297,8 +297,8 @@ def create_payload_transfer_workflow() -> None:
                 "content_match": "",
                 "call_type": "GET",
                 "url": "http://127.0.0.1:5000/rest/instance/device/{{device.name}}",
-                "payload": "",
-                "multiprocessing": "y",
+                "payload": {},
+                "multiprocessing": True,
             }
         ]
         + [

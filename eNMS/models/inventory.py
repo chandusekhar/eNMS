@@ -197,12 +197,13 @@ class Link(Object, metaclass=register_class):
 
     def update(self, **kwargs: Any) -> None:
         if "source_name" in kwargs:
-            kwargs["source"] = fetch("Device", name=kwargs.pop("source_name")).id
-            kwargs["destination"] = fetch(
-                "Device", name=kwargs.pop("destination_name")
-            ).id
+            kwargs["source"] = fetch("Device", name=kwargs.pop("source_name"))
+            kwargs["destination"] = fetch("Device", name=kwargs.pop("destination_name"))
         kwargs.update(
-            {"source_id": kwargs["source"], "destination_id": kwargs["destination"]}
+            {
+                "source_id": kwargs["source"].id,
+                "destination_id": kwargs["destination"].id,
+            }
         )
         super().update(**kwargs)
         for pool in fetch_all("Pool"):
